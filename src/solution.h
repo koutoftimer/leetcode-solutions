@@ -19,6 +19,13 @@
 #include <string.h>
 #include <uthash.h>
 
+#define SWAP(a, b)                         \
+        do {                               \
+                __typeof(a) __tmp = a;     \
+                a                 = b;     \
+                b                 = __tmp; \
+        } while (0)
+
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -80,3 +87,5 @@ make_tree(int* values, int size)
 //
 // Leetcode declaration goes below
 //
+
+int* findMode(struct TreeNode* root, int* returnSize);
