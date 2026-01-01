@@ -1,3 +1,13 @@
 #include "solution.h"
 
-// definition goes here
+bool
+checkPerfectNumber(int const num)
+{
+        int sum = 1;
+        for (int i = 2; i * i < num; ++i) {
+                if (num % i == 0) {
+                        sum += i + num / i;
+                }
+        }
+        return sum == num;
+}
