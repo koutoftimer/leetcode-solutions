@@ -20,4 +20,4 @@ CFLAGS+=(-std=gnu11)
 # CFLAGS+=(-O2)
 CFLAGS+=(-O0)
 
-$CC ${CFLAGS[@]} run.c && time ./a.out
+$CC ${CFLAGS[@]} solution.c run.c && time ./a.out
