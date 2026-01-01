@@ -80,3 +80,5 @@ make_tree(int* values, int size)
 //
 // Leetcode declaration goes below
 //
+
+char* convertToBase7(int num);
