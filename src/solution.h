@@ -81,4 +81,4 @@ make_tree(int* values, int size)
 // Leetcode declaration goes below
 //
 
-// declaration goes here
+int repeatedNTimes(int* nums, int numsSize);
