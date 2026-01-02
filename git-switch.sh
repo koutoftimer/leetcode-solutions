@@ -5,7 +5,7 @@
 title="$@"
 title="${title// /-}"
 title="${title//./}"
-branch=$(git branch | cut --delimiter=' ' --fields=2)
+branch=$(git branch --show-current)
 
 printf "Switching from '$branch' to '$title'\nConfirm [y/N] "
 read input
