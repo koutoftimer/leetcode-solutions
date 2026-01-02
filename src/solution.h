@@ -11,6 +11,7 @@
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
+#include <pthread.h>
 #include <setjmp.h>
 #include <stdbool.h>
 #include <stdint.h>
