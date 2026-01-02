@@ -82,4 +82,6 @@ make_tree(int* values, int size)
 // Leetcode declaration goes below
 //
 
-int fib(int n);
+int findLUSlength(char* a, char* b);
+return 0;
+}
