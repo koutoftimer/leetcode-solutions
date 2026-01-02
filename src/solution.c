@@ -1,19 +1,13 @@
 #include "solution.h"
 
-static int dp[31] = {0, 1};
-
-static void
-init_fib()
+bool
+detectCapitalUse(char* s)
 {
-        for (int i = 2; i <= 30; ++i) {
-                dp[i] = dp[i - 2] + dp[i - 1];
-        }
-}
+        int len             = strlen(s);
+        int capitals        = 0;
+        bool first_capital  = *s < 'a';
+        while (*s) capitals += *s < 'a';
 
-int
-fib(int n)
-{
-        static pthread_once_t ONCE = PTHREAD_ONCE_INIT;
-        pthread_once(&ONCE, init_fib);
-        return dp[n];
+        return capitals == 0 || capitals == len ||
+               (first_capital && capitals == 1);
 }

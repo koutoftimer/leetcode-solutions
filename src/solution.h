@@ -82,4 +82,4 @@ make_tree(int* values, int size)
 // Leetcode declaration goes below
 //
 
-int fib(int n);
+bool detectCapitalUse(char* word);
