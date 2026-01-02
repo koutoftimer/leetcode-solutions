@@ -58,6 +58,12 @@ struct TreeNode {
         struct TreeNode* right;
 };
 
+struct Node {
+        int val;
+        int numChildren;
+        struct Node** children;
+};
+
 static struct TreeNode*
 add_node_into_the_tree(struct TreeNode* root, int* value)
 {
@@ -81,4 +87,4 @@ make_tree(int* values, int size)
 // Leetcode declaration goes below
 //
 
-// declaration goes here
+int maxDepth(struct Node* root);
