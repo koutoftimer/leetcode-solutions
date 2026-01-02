@@ -77,6 +77,12 @@ make_tree(int* values, int size)
         return root;
 }
 
+struct Node {
+        int val;
+        int numChildren;
+        struct Node** children;
+};
+
 //
 // Leetcode declaration goes below
 //
