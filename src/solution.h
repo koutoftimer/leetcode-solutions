@@ -22,6 +22,12 @@
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define SWAP(a, b)                         \
+        do {                               \
+                __typeof(a) __tmp = a;     \
+                a                 = b;     \
+                b                 = __tmp; \
+        } while (0)
 
 #define typeof __typeof
 #define static_assert _Static_assert
