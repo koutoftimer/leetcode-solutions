@@ -87,4 +87,5 @@ struct Node {
 // Leetcode declaration goes below
 //
 
-// declaration goes here
+char** findRestaurant(char** a, int a_len, char** b, int b_len,
+                      int* returnSize);
