@@ -1,9 +1,9 @@
 # set -xe
 
-CC=gcc-14
+# CC=gcc-14
 # CC=gcc-15
 # CC=clang-19
-# CC=clang-20
+CC=clang-20
 
 # CFLAGS=(-I.. -Wall -Wextra -Wno-comment -ggdb3 -std=gnu11 -fsanitize=address)
 CFLAGS=(
