@@ -2,43 +2,45 @@
 
 enum { MOD = (int)1e9 + 7 };
 
-enum Color {
-        R = 1 << 1,
-        G = 1 << 2,
-        Y = 1 << 3,
-};
+typedef struct {
+        long d[2][2];
+} mat22;
 
-#define mask(r, g, b) ((r << 16) | (g << 8) | b)
-
-static uint const combinations[] = {
-    mask(R, Y, R), mask(R, Y, G), mask(R, G, R), mask(R, G, Y),
-    mask(Y, R, Y), mask(Y, G, Y), mask(Y, G, R), mask(Y, R, G),
-    mask(G, R, G), mask(G, Y, G), mask(G, Y, R), mask(G, R, Y),
-};
-
-static int dp[5001][ARRAY_SIZE(combinations)] = {0};
-
-static long
-r(int row, uint prev)
+static mat22
+mul(mat22 a, mat22 b)
 {
-        if (row == 0) return 1;
-        long matches = 0;
-        for (uint i = 0; i < ARRAY_SIZE(combinations); ++i) {
-                if ((combinations[i] & prev) == 0) {
-                        if (dp[row][i]) {
-                                matches += dp[row][i];
-                        } else {
-                                matches += dp[row][i] =
-                                    r(row - 1, combinations[i]) % MOD;
-                        }
-                        matches %= MOD;
+        mat22 ret;
+#define C(i, j) \
+        ret.d[i][j] = (a.d[i][0] * b.d[0][j] + a.d[i][1] * b.d[1][j]) % MOD;
+        C(0, 0);
+        C(0, 1);
+        C(1, 0);
+        C(1, 1);
+        return ret;
+}
+
+static mat22
+bin_pow(mat22 a, int pow)
+{
+        mat22 b = {{{1, 0}, {0, 1}}};
+        while (pow > 0) {
+                if (pow % 2 == 0) {
+                        pow /= 2;
+                        a = mul(a, a);
+                } else {
+                        pow -= 1;
+                        b = mul(b, a);
                 }
         }
-        return matches;
+        return b;
 }
 
 int
 numOfWays(int n)
 {
-        return r(n, 0);
+        mat22 A   = {{{3, 2}, {2, 2}}};
+        A         = bin_pow(A, n - 1);
+        mat22 B   = {{{6, 0}, {6, 0}}};
+        mat22 res = mul(A, B);
+        return (res.d[0][0] + res.d[1][0]) % MOD;
 }
