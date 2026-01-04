@@ -3,4 +3,14 @@
 int
 main()
 {
+#define test(n, exp)                                         \
+        do {                                                 \
+                int res = numOfWays(n);                      \
+                printf("res: %d\n", res);                    \
+                assert(res == exp && "n = " #n " != " #exp); \
+        } while (0);
+        test(1, 12);
+        test(2, 54);
+        test(3, 246);
+        test(4, 1122);
 }
