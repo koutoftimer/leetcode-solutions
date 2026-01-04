@@ -18,6 +18,6 @@ CFLAGS+=(-std=gnu11)
 # CFLAGS+=(-std=gnu23)
 # CFLAGS+=(-std=c23)
 # CFLAGS+=(-O2)
-CFLAGS+=(-O0)
+CFLAGS+=(-Og)
 
 $CC ${CFLAGS[@]} solution.c run.c && time ./a.out
