@@ -15,6 +15,7 @@ CFLAGS=(
   -fsanitize=signed-integer-overflow
 )
 CFLAGS+=(-std=gnu11)
+# CFLAGS+=(-pg)
 # CFLAGS+=(-std=gnu23)
 # CFLAGS+=(-std=c23)
 # CFLAGS+=(-O2)
