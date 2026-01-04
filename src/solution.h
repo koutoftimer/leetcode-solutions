@@ -87,4 +87,4 @@ struct Node {
 // Leetcode declaration goes below
 //
 
-// declaration goes here
+int knightDialer(int n);
