@@ -93,4 +93,8 @@ struct Node {
 // Leetcode declaration goes below
 //
 
-// declaration goes here
+typedef struct KthLargest KthLargest;
+
+KthLargest* kthLargestCreate(int k, int* a, int size);
+int kthLargestAdd(KthLargest* self, int value);
+void kthLargestFree(KthLargest* self);
