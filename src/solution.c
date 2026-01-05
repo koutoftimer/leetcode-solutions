@@ -13,21 +13,23 @@ imageSmoother(int** a, int rows, int* cols, int* returnSize,
                         for (int c = col - 1; c < col + 2; ++c) {
                                 if (r == row && c == col) continue;
                                 if (!(0 <= c && c < *cols)) continue;
-                                sum += a[r][c];
+                                sum += a[r][c] & 0xFF;
                                 count++;
                         }
                 }
                 return sum / count;
         }
-        int** res = malloc(rows * sizeof *res);
         for (int row = 0; row < rows; ++row) {
-                res[row] = malloc(*cols * sizeof **res);
                 for (int col = 0; col < *cols; ++col) {
-                        res[row][col] = average(row, col);
+                        a[row][col] |= average(row, col) << 8;
                 }
         }
-        *returnColumns = malloc(rows * sizeof **returnColumns);
-        for (int i = 0; i < rows; ++i) (*returnColumns)[i] = *cols;
-        *returnSize = rows;
-        return res;
+        for (int row = 0; row < rows; ++row) {
+                for (int col = 0; col < *cols; ++col) {
+                        a[row][col] >>= 8;
+                }
+        }
+        *returnColumns = cols;
+        *returnSize    = rows;
+        return a;
 }
