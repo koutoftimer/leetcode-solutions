@@ -1,69 +1,91 @@
 #include "solution.h"
 
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define SWAP(a, b)                         \
+        do {                               \
+                __typeof(a) __tmp = a;     \
+                a                 = b;     \
+                b                 = __tmp; \
+        } while (0)
+
 typedef struct KthLargest {
-        int* a;
+        int* heap;
         int size;
         int k;
 } KthLargest;
 
+static void
+heap_down(KthLargest* self, int v)
+{
+        while (true) {
+                int const left  = 2 * v + 1;
+                int const right = 2 * v + 2;
+                int min         = v;
+                if (left < self->size && self->heap[left] < self->heap[min]) {
+                        min = left;
+                }
+                if (right < self->size && self->heap[right] < self->heap[min]) {
+                        min = right;
+                }
+                if (min != v) {
+                        SWAP(self->heap[min], self->heap[v]);
+                        v = min;
+                } else {
+                        break;
+                }
+        }
+}
+
+static void
+heap_up(KthLargest* self, int v)
+{
+        while (v > 0) {
+                int const parent = (v - 1) / 2;
+                if (self->heap[parent] > self->heap[v]) {
+                        SWAP(self->heap[parent], self->heap[v]);
+                        v = parent;
+                } else {
+                        break;
+                }
+        }
+}
+
+static void
+heap_insert(KthLargest* self, int value)
+{
+        if (self->size < self->k) {
+                self->heap[self->size++] = value;
+                heap_up(self, self->size - 1);
+        } else if (value > self->heap[0]) {
+                self->heap[0] = value;
+                heap_down(self, 0);
+        }
+}
+
 KthLargest*
 kthLargestCreate(int k, int* a, int size)
 {
-        int const capacity = k > size ? k : size;
-        int* clone         = malloc(capacity * sizeof *a);
-        memcpy(clone, a, size * sizeof *a);
-
-        int cmp(int* a, int* b) { return *b - *a; }
-        qsort(clone, size, sizeof *clone, (__compar_fn_t)cmp);
-
         KthLargest* self = malloc(sizeof *self);
-        self->a          = clone;
-        self->size       = size;
+        self->heap       = malloc(k * sizeof *a);
+        self->size       = 0;
         self->k          = k;
-        return self;
-}
-
-static int
-lower_bound(KthLargest* self, int value)
-{
-        if (self->size == 0) return 0;
-        int l = -1;
-        int r = self->size;
-        while (l + 1 < r) {
-                int mid = l + (r - l) / 2;
-                if (value >= self->a[mid]) {
-                        r = mid;
-                } else {
-                        l = mid;
-                }
+        for (int i = 0; i < size; ++i) {
+                heap_insert(self, a[i]);
         }
-        return r;
+        return self;
 }
 
 int
 kthLargestAdd(KthLargest* self, int value)
 {
-        int insertion = lower_bound(self, value);
-
-        if (self->size < self->k) {
-                self->size++;
-        }
-        if (insertion < self->size) {
-                int const len = self->size - insertion - 1;
-                memmove(self->a + insertion + 1, self->a + insertion,
-                        len * sizeof *self->a);
-        }
-        if (insertion < self->size) {
-                self->a[insertion] = value;
-        }
-
-        return self->a[self->k - 1];
+        heap_insert(self, value);
+        return self->heap[0];
 }
 
 void
 kthLargestFree(KthLargest* self)
 {
-        free(self->a);
+        free(self->heap);
 }
 
 /**
