@@ -11,24 +11,8 @@
 typedef struct KthLargest {
         int* heap;
         int size;
+        int k;
 } KthLargest;
-
-KthLargest*
-kthLargestCreate(int k, int* a, int size)
-{
-        int cmp(int* a, int* b) { return *a - *b; }
-        qsort(a, size, sizeof *a, (__compar_fn_t)cmp);
-        int* clone = malloc(k * sizeof *a);
-        if (size > k) a += size - k;
-        memcpy((size < k ? 1 : 0) + clone, a, MIN(size, k) * sizeof *a);
-        if (size < k) clone[0] = INT_MIN;
-
-        KthLargest* self = malloc(sizeof *self);
-        self->heap       = clone;
-        self->size       = k;
-
-        return self;
-}
 
 static void
 heap_down(KthLargest* self, int v)
@@ -52,13 +36,45 @@ heap_down(KthLargest* self, int v)
         }
 }
 
-int
-kthLargestAdd(KthLargest* self, int value)
+static void
+heap_up(KthLargest* self, int value)
 {
-        if (value > self->heap[0]) {
+        int v = self->size++;
+        while (v > 0 && self->heap[(v - 1) / 2] > value) {
+                self->heap[v] = self->heap[(v - 1) / 2];
+                v             = (v - 1) / 2;
+        }
+        self->heap[v] = value;
+}
+
+static void
+heap_insert(KthLargest* self, int value)
+{
+        if (self->size < self->k) {
+                heap_up(self, value);
+        } else if (value > self->heap[0]) {
                 self->heap[0] = value;
                 heap_down(self, 0);
         }
+}
+
+KthLargest*
+kthLargestCreate(int k, int* a, int size)
+{
+        KthLargest* self = malloc(sizeof *self);
+        self->heap       = malloc(k * sizeof *a);
+        self->size       = 0;
+        self->k          = k;
+        for (int i = 0; i < size; ++i) {
+                heap_insert(self, a[i]);
+        }
+        return self;
+}
+
+int
+kthLargestAdd(KthLargest* self, int value)
+{
+        heap_insert(self, value);
         return self->heap[0];
 }
 
@@ -67,3 +83,11 @@ kthLargestFree(KthLargest* self)
 {
         free(self->heap);
 }
+
+/**
+ * Your KthLargest struct will be instantiated and called as such:
+ * KthLargest* obj = kthLargestCreate(k, nums, numsSize);
+ * int param_1 = kthLargestAdd(obj, val);
+
+ * kthLargestFree(obj);
+*/
