@@ -1,5 +1,11 @@
 #!/bin/bash
 
+git switch master
+if [ $? -ne 0 ]; then
+        echo "ERROR: can't switch to master branch" >&2
+        exit 1
+fi
+
 [[ $# == 0 ]] && echo "Usage sh $0 <name of the problem>" && exit 1
 
 title="$@"
