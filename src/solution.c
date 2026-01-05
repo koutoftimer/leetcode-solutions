@@ -4,7 +4,6 @@ enum { CAPACITY = 50000 };
 
 struct {
         int first;
-        int last;
         int freq;
 }* count;
 
@@ -32,10 +31,9 @@ findShortestSubArray(int* a, int size)
         for (int i = 0; i < size; ++i) {
                 int const index = a[i];
                 count[index].freq++;
-                count[index].last = i + 1;
                 if (!count[index].first) count[index].first = i + 1;
 
-                int const len = count[index].last - count[index].first;
+                int const len = i + 1 - count[index].first;
                 if (count[index].freq > max_freq) {
                         max_freq = count[index].freq;
                         min_len  = len;
