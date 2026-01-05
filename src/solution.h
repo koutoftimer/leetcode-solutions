@@ -93,4 +93,4 @@ struct Node {
 // Leetcode declaration goes below
 //
 
-// declaration goes here
+int search(int* a, int size, int target);
