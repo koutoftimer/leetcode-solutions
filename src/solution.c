@@ -1,41 +1,50 @@
 #include "solution.h"
 
-enum { CAPACITY = (int)1e6 + 1 };
+enum {
+        CAPACITY = (int)1e6 + 1,
+        BUCKETS  = (CAPACITY + 31) / 32,
+};
 
 typedef struct {
-        bool* count;
+        uint* buckets;
 } MyHashSet;
 
 MyHashSet*
 myHashSetCreate()
 {
         MyHashSet* self = malloc(sizeof *self);
-        self->count     = calloc(CAPACITY, sizeof *self->count);
+        self->buckets   = calloc(BUCKETS, sizeof *self->buckets);
         return self;
 }
 
 void
 myHashSetAdd(MyHashSet* self, int key)
 {
-        self->count[key] = true;
+        uint const bucket_index = key / 32;
+        uint const flag         = 1u << (key % 32);
+        self->buckets[bucket_index] |= flag;
 }
 
 void
 myHashSetRemove(MyHashSet* self, int key)
 {
-        self->count[key] = false;
+        uint const bucket_index = key / 32;
+        uint const flag         = 1u << (key % 32);
+        self->buckets[bucket_index] &= ~flag;
 }
 
 bool
 myHashSetContains(MyHashSet* self, int key)
 {
-        return self->count[key];
+        uint const bucket_index = key / 32;
+        uint const flag         = 1u << (key % 32);
+        return self->buckets[bucket_index] & flag;
 }
 
 void
 myHashSetFree(MyHashSet* self)
 {
-        free(self->count);
+        free(self->buckets);
 }
 
 /**
