@@ -4,8 +4,11 @@
 int
 minCostClimbingStairs(int* cost, int size)
 {
+        int res[2] = {cost[0], cost[1]};
         for (int i = 2; i < size; ++i) {
-                cost[i] += MIN(cost[i - 1], cost[i - 2]);
+                int const tmp = cost[i] + MIN(res[0], res[1]);
+                res[0]        = res[1];
+                res[1]        = tmp;
         }
-        return MIN(cost[size - 1], cost[size - 2]);
+        return MIN(res[0], res[1]);
 }
