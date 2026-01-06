@@ -2,60 +2,42 @@
 
 enum { CAPACITY = (int)1e4 };
 
-struct Queue {
-        struct TreeNode** items;
-        int front;
-        int back;
-};
+int* sum;
 
-struct TreeNode** arena;
+int
+maxLevelSum(struct TreeNode* root)
+{
+        memset(sum, 0, CAPACITY * sizeof *sum);
+        int max_level = 0;
+        void dfs(struct TreeNode * root, int level)
+        {
+                if (!root) return;
+                dfs(root->left, level + 1);
+                dfs(root->right, level + 1);
+                sum[level - 1] += root->val;
+                if (level > max_level) max_level = level;
+        }
+        dfs(root, 1);
+        int min_level, max_sum = INT_MIN;
+        for (int i = 0; i < max_level; ++i) {
+                if (sum[i] > max_sum) {
+                        max_sum   = sum[i];
+                        min_level = i;
+                }
+        }
+        return min_level - 1;
+}
 
 [[gnu::constructor]]
 static void
 init_stack()
 {
-        arena = malloc(CAPACITY * sizeof *arena);
+        sum = malloc(CAPACITY * sizeof *sum);
 }
 
 [[gnu::destructor]]
 static void
 free_stack()
 {
-        free(arena);
-}
-
-#define queue_push(queue, value) queue.items[queue.back++] = (value)
-#define queue_pop(queue) queue.items[queue.front++]
-#define queue_size(queue) (queue.back - queue.front)
-
-int
-maxLevelSum(struct TreeNode* root)
-{
-        struct Queue queue = {.items = arena};
-
-        queue_push(queue, root);
-
-        int level = 1, min_level = level, max_sum = root->val;
-        while (queue_size(queue)) {
-                int sum = 0;
-                for (int i = 0, n = queue_size(queue); i < n; ++i) {
-                        struct TreeNode* node = queue_pop(queue);
-                        if (node->left) {
-                                sum += node->left->val;
-                                queue_push(queue, node->left);
-                        }
-                        if (node->right) {
-                                sum += node->right->val;
-                                queue_push(queue, node->right);
-                        }
-                }
-
-                level++;
-                if (sum > max_sum && queue_size(queue)) {
-                        min_level = level;
-                        max_sum   = sum;
-                }
-        }
-
-        return min_level;
+        free(sum);
 }
