@@ -2,9 +2,10 @@
 
 enum { CAPACITY = (int)1e4 };
 
-struct Stack {
+struct Queue {
         struct TreeNode** items;
-        int size;
+        int front;
+        int back;
 };
 
 struct TreeNode** arena;
@@ -13,7 +14,7 @@ struct TreeNode** arena;
 static void
 init_stack()
 {
-        arena = malloc(2 * CAPACITY * sizeof *arena);
+        arena = malloc(CAPACITY * sizeof *arena);
 }
 
 [[gnu::destructor]]
@@ -23,39 +24,34 @@ free_stack()
         free(arena);
 }
 
-#define stack_push(stack, value) stack.items[stack.size++] = (value)
-#define stack_pop(stack) stack.items[--stack.size]
+#define queue_push(queue, value) queue.items[queue.back++] = (value)
+#define queue_pop(queue) queue.items[queue.front++]
+#define queue_size(queue) (queue.back - queue.front)
 
 int
 maxLevelSum(struct TreeNode* root)
 {
-        int offset         = 0;
-        struct Stack stack = {.items = arena + offset};
-        offset ^= CAPACITY;
+        struct Queue queue = {.items = arena};
 
-        stack_push(stack, root);
+        queue_push(queue, root);
 
         int level = 1, min_level = level, max_sum = root->val;
-        while (stack.size) {
-                struct Stack next = {.items = arena + offset};
-                offset ^= CAPACITY;
-
+        while (queue_size(queue)) {
                 int sum = 0;
-                while (stack.size) {
-                        struct TreeNode* node = stack_pop(stack);
+                for (int i = 0, n = queue_size(queue); i < n; ++i) {
+                        struct TreeNode* node = queue_pop(queue);
                         if (node->left) {
                                 sum += node->left->val;
-                                stack_push(next, node->left);
+                                queue_push(queue, node->left);
                         }
                         if (node->right) {
                                 sum += node->right->val;
-                                stack_push(next, node->right);
+                                queue_push(queue, node->right);
                         }
                 }
 
                 level++;
-                stack = next;
-                if (sum > max_sum && stack.size) {
+                if (sum > max_sum && queue_size(queue)) {
                         min_level = level;
                         max_sum   = sum;
                 }
