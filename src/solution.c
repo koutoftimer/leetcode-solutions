@@ -1,30 +1,35 @@
 #include "solution.h"
 
 struct Stack {
-        int items[200];
+        struct TreeNode* items[200];
         int size;
 };
+#define stack_push(stack, value) (stack)->items[(stack)->size++] = (value);
+#define stack_pop(stack) (stack)->items[--(stack)->size]
 
 #define is_leaf(root) (!(root)->left && !(root)->right)
 
-static void
-traverse(struct TreeNode* root, struct Stack* stack)
+static int
+traverse(struct Stack* stack)
 {
-        if (!root) return;
-        if (is_leaf(root)) {
-                stack->items[stack->size++] = root->val;
+        for (;;) {
+                struct TreeNode* root = stack_pop(stack);
+                if (root->right) stack_push(stack, root->right);
+                if (root->left) stack_push(stack, root->left);
+                if (is_leaf(root)) return root->val;
         }
-        traverse(root->left, stack);
-        traverse(root->right, stack);
 }
 
 bool
 leafSimilar(struct TreeNode* root1, struct TreeNode* root2)
 {
         struct Stack stack1 = {0}, stack2 = {0};
-        traverse(root1, &stack1);
-        traverse(root2, &stack2);
-        return stack1.size == stack2.size &&
-               memcmp(stack1.items, stack2.items,
-                      stack1.size * sizeof *stack1.items) == 0;
+        stack_push(&stack1, root1);
+        stack_push(&stack2, root2);
+        while (stack1.size && stack2.size) {
+                int const leaf1 = traverse(&stack1);
+                int const leaf2 = traverse(&stack2);
+                if (leaf1 != leaf2) return false;
+        }
+        return !stack1.size && !stack2.size;
 }
