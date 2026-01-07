@@ -93,4 +93,4 @@ struct Node {
 // Leetcode declaration goes below
 //
 
-// declaration goes here
+char** uncommonFromSentences(char* s1, char* s2, int* returnSize);
