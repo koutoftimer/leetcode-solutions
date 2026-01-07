@@ -25,9 +25,8 @@ toGoatLatin(char* s)
                 }
                 res[size++] = 'm';
                 res[size++] = 'a';
-                for (int i = 0, n = a++; i < n; ++i) {
-                        res[size++] = 'a';
-                }
+                memset(res + size, 'a', a);
+                size += a++;
                 if (*space) {
                         res[size++] = ' ';
                         space++;
