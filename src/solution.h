@@ -93,4 +93,4 @@ struct Node {
 // Leetcode declaration goes below
 //
 
-// declaration goes here
+int* fairCandySwap(int* a, int a_len, int* b, int b_len, int* returnSize);
