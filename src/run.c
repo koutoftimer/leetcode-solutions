@@ -3,8 +3,6 @@
 int
 main()
 {
-        // int a_len = 500, b_len = 500;
-        // printf("SIZE: %zu\n", sizeof(int[1][b_len + 1][b_len + 1]));
 #define test(exp)                                                    \
         printf("\nCase %d:\n\n", ++id);                              \
         int res = maxDotProduct(a, ARRAY_SIZE(a), b, ARRAY_SIZE(b)); \
