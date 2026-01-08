@@ -9,14 +9,8 @@ surfaceArea(int** grid, int xs, int* ys)
                 for (int y = 0; y < *ys; ++y) {
                         if (!grid[x][y]) continue;
                         total += 2 + 4 * grid[x][y];
-#define subtract_overlap(xx, yy)                         \
-        if (0 <= xx && xx < xs && 0 <= yy && yy < *ys) { \
-                total -= MIN(grid[x][y], grid[xx][yy]);  \
-        }
-                        subtract_overlap(x - 1, y);
-                        subtract_overlap(x + 1, y);
-                        subtract_overlap(x, y + 1);
-                        subtract_overlap(x, y - 1);
+                        if (x > 0) total -= 2 * MIN(grid[x][y], grid[x - 1][y]);
+                        if (y > 0) total -= 2 * MIN(grid[x][y], grid[x][y - 1]);
                 }
         }
         return total;
