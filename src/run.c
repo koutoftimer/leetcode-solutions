@@ -3,11 +3,25 @@
 int
 main()
 {
+        // int a_len = 500, b_len = 500;
+        // printf("SIZE: %zu\n", sizeof(int[1][b_len + 1][b_len + 1]));
 #define test(exp)                                                    \
+        printf("\nCase %d:\n\n", ++id);                              \
         int res = maxDotProduct(a, ARRAY_SIZE(a), b, ARRAY_SIZE(b)); \
         printf("res: %d\n", res);                                    \
         assert(exp == res);
 
+        int id = 0;
+        {
+                int a[] = {3, -1, 0};
+                int b[] = {4, 5, 3};
+                test(15)
+        }
+        {
+                int a[] = {1, 2, 3, 4, 5};
+                int b[] = {1, 2, 3, 4, 5};
+                test(55)
+        }
         {
                 int a[] = {2, 1, -2, 5};
                 int b[] = {3, 0, -6};
